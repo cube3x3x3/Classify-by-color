@@ -44,3 +44,10 @@ loop until no improvement or until maxCount
 end loop
 return clustering
 """
+import random
+k = 3
+
+# assign each tuple to a randomly selected cluster
+clusters = [random.randrange(k) for i in range(len(datasets))]
+print clusters, len(clusters)
+

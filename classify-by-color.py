@@ -13,8 +13,9 @@ Z = img.reshape((-1,3)) # convert to np.float32
 Z = np.float32(Z) # define criteria, number of clusters(K) and apply kmeans() 
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0) 
 K = 8
+TRY = 3 # best 30
 # retval, bestLabels, centers = cv2.kmeans(Z, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
-retval, bestLabels, centers = cv2.kmeans(Z, K, criteria, 10, cv2.KMEANS_RANDOM_CENTERS) #opencv 2.x kmeans lesser args!
+retval, bestLabels, centers = cv2.kmeans(Z, K, criteria, TRY, cv2.KMEANS_RANDOM_CENTERS) #opencv 2.x kmeans lesser args!
 
 # Now convert back into uint8, and make original image 
 centers = np.uint8(centers)
@@ -24,4 +25,8 @@ cv2.imshow('res2',res2)
 #cv2.imshow('lena', img)
 cv2.waitKey(0) 
 cv2.destroyAllWindows()
+
+for center in centers:
+    print (center)
+    print '#{:02X}{:02X}{:02X}'.format(*center)
 

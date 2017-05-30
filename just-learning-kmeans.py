@@ -45,9 +45,42 @@ end loop
 return clustering
 """
 import random
+import sys
+random.seed(12345)
 k = 3
-
 # assign each tuple to a randomly selected cluster
 clusters = [random.randrange(k) for i in range(len(datasets))]
 print clusters, len(clusters)
+
+# compute the centroid for each cluster
+## Calculate the new means to be the centroids of the observations
+##  in the new clusters.
+means = [[0, 0] for i in range(k)]
+clusterCounts = [0 for i in range(k)]
+for i in range(len(datasets)):
+    means[clusters[i]][0] += datasets[i][0]
+    means[clusters[i]][1] += datasets[i][1]
+    clusterCounts[clusters[i]] += 1
+
+print means, len(means), clusterCounts, len(clusterCounts)
+
+
+for i in range(k):
+    means[i][0] /= clusterCounts[i]
+    means[i][1] /= clusterCounts[i]
+    
+print means, len(means)
+nearest = [sys.maxint for i in range(k)]
+centroid = [[0,0] for i in range(k)]
+print nearest, len(nearest)
+print centroid, len(centroid)
+for i in range(len(datasets)):
+    # dist(m, a)
+    currentDist = dist(means[clusters[i]], datasets[i])
+    if currentDist < nearest[clusters[i]]:
+        nearest[clusters[i]] = currentDist
+        centroid[clusters[i]] = datasets[i]
+
+print nearest, len(nearest)
+print centroid, len(centroid)
 

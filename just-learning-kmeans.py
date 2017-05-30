@@ -46,7 +46,7 @@ return clustering
 """
 import random
 import sys
-#random.seed(12345)
+random.seed(12345)
 k = 3
 maxCount = 30
 # assign each tuple to a randomly selected cluster
@@ -66,16 +66,16 @@ def updateStep(centroid):
         means[clusters[i]][1] += datasets[i][1]
         clusterCounts[clusters[i]] += 1
     
-    print means, len(means), clusterCounts, len(clusterCounts)
+    # print means, len(means), clusterCounts, len(clusterCounts)
     
     
     for i in range(k):
         means[i][0] /= clusterCounts[i]
         means[i][1] /= clusterCounts[i]
         
-    print means, len(means)
+    #print means, len(means)
     nearest = [sys.maxint for i in range(k)]
-    print nearest, len(nearest), centroid, len(centroid)
+    #print nearest, len(nearest), centroid, len(centroid)
     for i in range(len(datasets)):
         # dist(m, a)
         currentDist = dist(means[clusters[i]], datasets[i])
@@ -102,21 +102,24 @@ for n in range(maxCount):
                 minDist = currentDist
                 clusters[i] = j
             
-    print clusters, len(clusters)
+    print clusters
     #update each cluster centroid
     lastCentroid = centroid[:]
     updateStep(centroid)
     if lastCentroid == centroid:
-        print n, centroid, len(centroid)
+        print n, centroid
         break
 
     
 #return clustering
 print clusters, len(clusters)
-for i in range(k):
-    for j in range(len(datasets)):
-        if i == clusters[j]:
-            print i,j,datasets[j]
+
+def printClusters(k, datasets, clusters):
+    for i in range(k):
+        for j in range(len(datasets)):
+            if i == clusters[j]:
+                print i,j,datasets[j]
             
+printClusters(k, datasets, clusters)
             
             

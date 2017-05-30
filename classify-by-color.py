@@ -38,9 +38,10 @@ def classify_color(file_name='lena_std.tif', display_it=0, number_of_cluster=3, 
         cv2.waitKey(0) 
         cv2.destroyAllWindows()
 
-    for center in centers:
-        print (center)
-        print '#{:02X}{:02X}{:02X}'.format(*center)
+    return centers
 
-classify_color(FILE_NAME, 1, NUMBER_OF_CLUSTER, MAX_COUNT)
+centroids = classify_color(FILE_NAME, 1, NUMBER_OF_CLUSTER, MAX_COUNT)
+for centroid in centroids:
+    print (centroid)
+    print '#{:02X}{:02X}{:02X}'.format(*centroid)
 

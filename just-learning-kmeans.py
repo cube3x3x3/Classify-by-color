@@ -100,7 +100,7 @@ for n in range(maxCount):
             currentDist = dist(centroid[j], datasets[i])
             if currentDist < minDist:
                 minDist = currentDist
-                clusters[i] = j
+                clusters[i] = int(j)
             
     print clusters
     #update each cluster centroid

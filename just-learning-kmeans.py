@@ -38,27 +38,35 @@ def dist(m, a):
         tmp += (m[i]-a[i])**2
     return math.sqrt(tmp)
 
+# compute the centroid for each cluster
 def update_step(centroids, data_sets, clusters, k):
     dimensions = len(data_sets[0])
     means = [[0 for j in range(dimensions)] for i in range(k)]
 
     def calculate_means(means, data_sets, clusters, k):
+        # sum of the data. 
+        # count of the number of the data for each cluster.
         _cluster_counts = [0 for i in range(k)]
         for i in range(len(data_sets)):
             target_cluster = clusters[i]
+            # add the data for each dimension
             for j in range(dimensions):
                 means[target_cluster][j] += data_sets[i][j]
+            # count the number of data for each cluster
             _cluster_counts[target_cluster] += 1
-        
+        # avarage of the data for each cluster
         for target_cluster in range(k):
             for i in range(dimensions):
                 means[target_cluster][i] /= _cluster_counts[target_cluster]
     
     def set_centroids(centroids, data_sets, clusters, k):
+        # search of nearest data each cluster centroid
         nearest_dist = [sys.maxint for i in range(k)]
         for i in range(len(data_sets)):
             target_cluster = clusters[i]
+            # calculate Euclidian distance each data to the data cluster mean
             current_dist = dist(means[target_cluster], data_sets[i])
+            # set centroid to nearest distance data
             if current_dist < nearest_dist[target_cluster]:
                 nearest_dist[target_cluster] = current_dist
                 centroids[target_cluster] = data_sets[i]
@@ -66,21 +74,23 @@ def update_step(centroids, data_sets, clusters, k):
     calculate_means(means, data_sets, clusters, k)
     set_centroids(centroids, data_sets, clusters, k)
 
-
+# assign each tuple to best(nearest Euclidean distance) cluster
 def assignment_step(clusters, data_sets, centroid):
     for i in range(len(data_sets)):
-        minDist = sys.maxint
-        for j in range(len(centroid)):
-            currentDist = dist(centroid[j], data_sets[i])
-            if currentDist < minDist:
-                minDist = currentDist
-                clusters[i] = int(j)
+        nearest_dist = sys.maxint
+        for target_cluster in range(len(centroid)):
+            # calculate Euclidian distance
+            current_dist = dist(centroid[target_cluster], data_sets[i])
+            # set new cluster (nearest centroid)
+            if current_dist < nearest_dist:
+                nearest_dist = current_dist
+                clusters[i] = int(target_cluster)
 
 def print_clusters(data_sets, clusters, k):
-    for i in range(k):
-        for j in range(len(data_sets)):
-            if i == clusters[j]:
-                print i, '|', j, '|', data_sets[j]
+    for target_cluster in range(k):
+        for i in range(len(data_sets)):
+            if clusters[i] == target_cluster:
+                print target_cluster, '|', i, '|', data_sets[i]
         print '-'*20
 
 # assign each tuple to a randomly selected cluster

@@ -7,11 +7,13 @@ Created on Mon May 29 14:10:20 2017
 import numpy as np 
 import cv2 
 
-NUMBER_OF_CLUSTER = 8
+NUMBER_OF_COLOR = 3
 MAX_COUNT = 10 # Loop limit
 ATTEMPTS = 3 # number of the process (assign each tuple to a randomly selected cluster)
 EPS = 1.0 # Precision
 FILE_NAME = 'lena_std.tif'
+DISPLAY_IT = 1
+HTML_STYLE = 1
 
 #classify_color(target_img_filename, display_img?, number_of_cluster, opt)
 def classify_color(file_name='lena_std.tif', display_it=0, number_of_cluster=3, opt_max_count=10, opt_attempts=3, opt_eps=1.0):
@@ -40,8 +42,12 @@ def classify_color(file_name='lena_std.tif', display_it=0, number_of_cluster=3, 
 
     return centers
 
-centroids = classify_color(FILE_NAME, 1, NUMBER_OF_CLUSTER, MAX_COUNT)
-for centroid in centroids:
-    print (centroid)
-    print '#{:02X}{:02X}{:02X}'.format(*centroid)
+def print_colors(colors, html_style=0):
+    for bgr in colors:
+        if html_style:
+            print '#{:02X}{:02X}{:02X}'.format(bgr[2], bgr[1], bgr[0])
+        else:
+            print bgr
 
+colors = classify_color(FILE_NAME, DISPLAY_IT, NUMBER_OF_COLOR, MAX_COUNT)
+print_colors(colors, HTML_STYLE)

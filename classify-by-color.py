@@ -99,7 +99,7 @@ def adjust_cluster(limit_dist=50, number_of_check=10, number_of_classify=NUMBER_
                 number_of_classify -= 1
         else:
             if last_ok == number_of_classify:
-                print "EULEKA!"
+                print "EUREKA!"
                 break
             last_ok = number_of_classify
             number_of_classify += 1

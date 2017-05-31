@@ -13,7 +13,7 @@ MAX_COUNT = 30 # Loop limit
 ATTEMPTS = 10 # number of the process (assign each tuple to a randomly selected cluster)
 EPS = 1.0 # Precision
 #FILE_NAME = 'Parrots.bmp'
-FILE_NAME = 'color/Pepper.bmp'
+FILE_NAME = 'color/Airplane.bmp'
 DISPLAY_IT = 1
 HTML_STYLE = 1
 
@@ -70,13 +70,13 @@ def check_any_distance(colors, limit_dist):
        for j in range(i+1, len(colors)):
             tmp = array_distance(colors[i], colors[j])
             if tmp < limit_dist:
-                print i, j, tmp
+                # print i, j, tmp
                 out_count += 1
     return out_count
 
 NUMBER_OF_CHECK = 30
 number_of_classify = NUMBER_OF_COLOR
-independence_of_color = 60 # Euclidian distance nomal = 50, pastel = 10, vivid = 100
+independence_of_color = 50 # Euclidian distance nomal = 50, pastel = 35, vivid = 100
 
 # Adjust the number of clusters
 def adjust_cluster(limit_dist=50, number_of_check=10, number_of_classify=NUMBER_OF_COLOR):
@@ -109,3 +109,33 @@ def adjust_cluster(limit_dist=50, number_of_check=10, number_of_classify=NUMBER_
 number_of_classify = adjust_cluster(independence_of_color, NUMBER_OF_CHECK, NUMBER_OF_COLOR)
 colors = classify_color(FILE_NAME, DISPLAY_IT, number_of_classify, MAX_COUNT)
 print_colors(colors, HTML_STYLE)
+
+def adjust_independence(cluster=3, number_of_check=10, independence=50):
+    last_ok = 0
+    for i in range(number_of_check):
+        print i
+        print 'independence:', independence
+        colors = classify_color(FILE_NAME, not DISPLAY_IT, cluster, MAX_COUNT)
+        out = check_any_distance(colors, independence)
+
+        if out:
+            if out != 1:
+                independence -= 10
+            else:
+                independence -= 5
+        else:
+            if last_ok == independence:
+                print "EUREKA!"
+                break
+            last_ok = independence
+            independence += 5
+        
+    return independence
+
+independence = adjust_independence(6, NUMBER_OF_CHECK, 100)
+print independence
+
+number_of_classify = adjust_cluster(independence, NUMBER_OF_CHECK, NUMBER_OF_COLOR)
+colors = classify_color(FILE_NAME, DISPLAY_IT, number_of_classify, MAX_COUNT)
+print_colors(colors, HTML_STYLE)
+
